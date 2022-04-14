@@ -9,9 +9,10 @@ const cors = require("cors");
 //import morgan from "morgan";
 const morgan = require('morgan');
 require("dotenv").config();
+//import 'dotenv/config'
 
 const fs = require('fs');
-
+//import {readdirSync} from 'fs'
 
 //db
 
@@ -34,8 +35,9 @@ app.use(cors({
     origin: ["http://localhost:3000"]
 }));
 
-//autoload routes
-fs.readdirSync('./routes').map((r) => app.use('/api', require(`./routes/${r}`)));
+
+const autoRoutes = require("../server/users/routes");
+app.use('/api', autoRoutes);
 
 
 const port = process.env.PORT || 8000;
