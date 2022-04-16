@@ -2,6 +2,11 @@
   
    import { useState } from "react";
     import axios from "axios";
+    import { toast } from "react-toastify";
+    import { Modal } from "antd";
+    import Link from "next/link";
+    import AuthForm from "../components/forms/AuthForm";
+
 
     const Register = () =>{
 
@@ -9,115 +14,91 @@
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [secret, setSecret] = useState("");
+    const [ok, setOk] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
-        //alert("works!")
+    const handleSubmit = async (e) => {
+      
         //console.log(name, email, password, secret);
         e.preventDefault();
-        axios.post('http://localhost:8000/api/register', {
-            name,
-            email,
-            password,
-            secret,
-        })
+        try{
+            setLoading(true);
+            //ERROR: Make sure to change hard-coded path to the path using `${process.env.NEXT_PUBLIC_API}/register`
+            const {data} = await axios.post('http://localhost:8000/api/register', 
+            {
+                name,
+                email,
+                password,
+                secret,
+            });
 
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+            setOk(data.ok);
+            //ERROR: Below code suppose to empty out the textfield, but below code doesn't work.
+            setName(' ');            
+            setEmail(' ');
+            setPassword(' ');
+            setSecret(' ');
+            setLoading(false);
 
-        
-    };
+        } catch(err){
+            toast.error(err.response.data);
+            setLoading(false);
+            
+        }
+   
+    }
 
         return (
             <div className="container-fluid">
-                <div className="row py-5 bg-secondary text-light">
+                <div className="row py-5  text-light bg-default-image">
                     <div className="col text-center">
                         <h1>Register</h1>
                     </div>
                 </div>
 
+                
+
+
+
                 <div className="row py-5">
                     <div className="col-md-6 offset-md-3">
-                        <form onSubmit={handleSubmit}>
+                        <AuthForm
+                            handleSubmit={handleSubmit}
+                            name = {name}
+                            setName={setName}
+                            email={email}
+                            setEmail={setEmail}
+                            password={password}
+                            setPassword={setPassword}
+                            secret={secret}
+                            setSecret={setSecret}
+                            loading={loading}
 
-                            <div className="form-group p-2">
-                                    <small>
-                                        <label className="text-muted">Your Name</label>
-                                    </small>
-                                    <input
-                                        defaultValue={name}
-                                        //onChange = {(e) => console.log(e.target.value)}
-                                        onChange = {(e) => setName(e.target.value)}
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Enter name"/>
-                            </div>
+                        />
 
-                            <div className="form-group p-2">
-                                <small>
-                                    <label className="text-muted">Email Address</label>
-                                </small>
-                                <input
-                                    defaultValue={email}
-                                   // onChange = {(e) => console.log(e.target.value)}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    type="email"
-                                    className="form-control"
-                                    placeholder="Enter Email"/>
-                            </div>
-
-                            <div className="form-group p-2">
-                                <small>
-                                    <label className="text-muted">Password</label>
-                                </small>
-                                <input
-                                    defaultValue={password}
-
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    type="password"
-                                    className="form-control"
-                                    placeholder="Enter Password"/>
-                            </div>
-
-                            <div className="form-group p-2">
-                                <small>
-                                    <label className="text-muted">Your Name</label>
-                                </small>
-                                <select className="form-control">
-                                    <option>What is you mother's name?</option>
-                                    <option>WHat is your father's name?</option>
-                                </select>
-
-                                <small className="form-text text-muted">
-                                    You can use this to reset your password if forgotten
-                                </small>
-                            </div>
-
-
-                            <div className="form-group p-2">
-                                <small>
-                                    <label className="text-muted">Your Answer</label>
-                                </small>
-                                <input
-                                    defaultValue={secret}
-                                    onChange={(e) => setSecret(e.target.value)}
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter Answer"/>
-                            </div>
-
-                            <div className="form-group p-2">
-                                <button type="submit" className="btn btn-primary p-2">Submit</button>
-                            </div>
-                            
-
-
-
-                            
-                        </form>
                     </div>
                 </div>
 
-                
+
+
+                <div className="row">
+                    <div className="col">
+                        <Modal
+                            title="Congratulation"
+                            visible={ok}
+                            onCancel={() => setOk(false)}
+                            footer={null}
+                        >
+                            <p>You have successfully registered</p>
+                            <Link href="/login">
+                                <a className="btn btn-primary btn-sm">Login</a>
+                            </Link>
+                        </Modal>
+                    </div>
+                </div>
+
+
+
             </div>
         );
     };

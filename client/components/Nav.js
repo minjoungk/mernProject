@@ -7,7 +7,7 @@ const Nav = () => {
       style={{ backgroundColor: "lightcoral" }}
     >
       <Link href="/">
-        <a className="nav-link text-light">Home</a>
+        <a className="nav-link text-light logo">Home</a>
       </Link>
 
       <Link href="/login">
