@@ -1,21 +1,24 @@
 //mongodb+srv://minjoungk:<password>@merncamp.7baei.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
   
-   import { useState } from "react";
+   import { useState, useContext } from "react";
     import axios from "axios";
     import { toast } from "react-toastify";
     import { Modal } from "antd";
     import Link from "next/link";
     import AuthForm from "../components/forms/AuthForm";
+    import { UserContext } from "../context";
+import { useRouter } from "next/router";
 
-
-    const Register = () =>{
-
+  const Register = () =>{
+    const [state] = useContext(UserContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [secret, setSecret] = useState("");
     const [ok, setOk] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
       
@@ -47,6 +50,7 @@
         }
    
     }
+if(state && state.token) router.push('/user/dashboard');
 
         return (
             <div className="container-fluid">
@@ -55,11 +59,6 @@
                         <h1>Register</h1>
                     </div>
                 </div>
-
-                
-
-
-
                 <div className="row py-5">
                     <div className="col-md-6 offset-md-3">
                         <AuthForm
@@ -79,8 +78,6 @@
                     </div>
                 </div>
 
-
-
                 <div className="row">
                     <div className="col">
                         <Modal
@@ -97,8 +94,20 @@
                     </div>
                 </div>
 
+                <div className="row"> 
+                    <div className="col">
 
+                        <p className="text-center">
+                            Already registered?{" "}
+                        <Link href="/login">
+                                <a>Login</a>
+                        </Link>
 
+                        
+                        </p>
+                    </div>
+                
+                </div>
             </div>
         );
     };

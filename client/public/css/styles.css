@@ -15,3 +15,7 @@ body {
 .logo{
     text-shadow: 2px 2px black;
 }
+
+.active{
+    background-color: darkslateblue;
+}

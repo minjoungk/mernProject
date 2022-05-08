@@ -4,9 +4,6 @@
   "description": "",
   "main": "index.js",
   "target": "module",
- 
-  
-  
   "scripts": {
     "start": "nodemon server.js"
   },
@@ -19,7 +16,9 @@
     "dotenv": "^16.0.0",
     "exm": "^0.5.12",
     "express": "^4.17.3",
+    "express-jwt": "^6.1.1",
     "fs-react": "^0.0.4",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.5.0",
     "mongoose": "^6.2.10",
     "morgan": "^1.10.0",

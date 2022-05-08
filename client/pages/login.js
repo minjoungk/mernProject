@@ -1,11 +1,91 @@
+//mongodb+srv://minjoungk:<password>@merncamp.7baei.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+  
+import { useState, useContext } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Modal } from "antd";
+import Link from "next/link";
+import AuthForm from "../components/forms/AuthForm";
+import {useRouter} from "next/router";
+import { UserContext } from "../context";
+
 const Login = () =>{
+
+
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [loading, setLoading] = useState(false);
+const [state, setState] = useContext(UserContext);
+const router = useRouter();
+
+const handleSubmit = async (e) => {
+  
+    
+    e.preventDefault();
+    try{
+        //console.log(email, password);
+        setLoading(true);
+        //ERROR: Make sure to change hard-coded path to the path using `${process.env.NEXT_PUBLIC_API}/register`
+        const {data} = await axios.post('http://localhost:8000/api/login', 
+        {
+            email: email,
+            password: password,
+        });
+        //update context
+        setState({
+            user: data.user,
+            token: data.token,
+        });
+
+        //save in local storage
+        //window.localStorage.setItem("auth", JSON.stringify(data));
+
+        router.push("/user/dashboard");
+    } catch(err){
+        toast.error(err.response);
+        setLoading(false);
+        
+    }
+
+}
+
+if(state && state.token) router.push('/user/dashboard');
     return (
-        <div className="container">
-            <div className="row">
-                <div className="col">
-                    <h1>Login Page</h1>
-                    <h1>Min</h1>
+        <div className="container-fluid">
+            <div className="row py-5  text-light bg-default-image">
+                <div className="col text-center">
+                    <h1>Login</h1>
                 </div>
+            </div>
+            <div className="row py-5">
+                <div className="col-md-6 offset-md-3">
+                    <AuthForm
+                        handleSubmit={handleSubmit}
+                        email={email}
+                        setEmail={setEmail}
+                        password={password}
+                        setPassword={setPassword}
+                        loading={loading}
+                        page="login"
+
+                    />
+
+                </div>
+            </div>
+
+            <div className="row"> 
+                <div className="col">
+
+                    <p className="text-center">
+                        Not registered yet?{" "}
+                    <Link href="/register">
+                            <a>Register</a>
+                    </Link>
+
+                    
+                    </p>
+                </div>
+            
             </div>
         </div>
     );

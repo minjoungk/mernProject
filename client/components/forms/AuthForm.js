@@ -11,11 +11,14 @@ const AuthForm = ({
     secret,
     setSecret,
     loading,
+    page,
 }) => (
 
 
-    <form onSubmit={handleSubmit}>
+<form onSubmit={handleSubmit}>
 
+
+    {page !== "login" && (
     <div className="form-group p-2">
             <small>
                 <label className="text-muted">Your Name</label>
@@ -27,7 +30,8 @@ const AuthForm = ({
                 type="text"
                 className="form-control"
                 placeholder="Enter name"/>
-    </div>
+    </div>)
+    }
 
     <div className="form-group p-2">
         <small>
@@ -55,9 +59,10 @@ const AuthForm = ({
             placeholder="Enter Password"/>
     </div>
 
+    { page !== "login" && (
     <div className="form-group p-2">
         <small>
-            <label className="text-muted">Your Name</label>
+            <label className="text-muted">Q</label>
         </small>
         <select className="form-control">
             <option>What is you mother's name?</option>
@@ -67,9 +72,10 @@ const AuthForm = ({
         <small className="form-text text-muted">
             You can use this to reset your password if forgotten
         </small>
-    </div>
+    </div>)
+    }
 
-
+    {page !== "login" && (
     <div className="form-group p-2">
         <small>
             <label className="text-muted">Your Answer</label>
@@ -80,11 +86,14 @@ const AuthForm = ({
             type="text"
             className="form-control"
             placeholder="Enter Answer"/>
-    </div>
-
+    </div>)
+}
     <div className="form-group p-2">
         <button 
-         disabled={!name || !password || !secret || !email}
+         disabled={page === "login" 
+                     ? !password || !email
+                     : !name || !password || !secret || !email
+                    }
          className="btn btn-primary p-2">{loading ? <SyncOutlined spin className="py-1"/> : "Submit"}</button>
     </div>
        
@@ -92,3 +101,4 @@ const AuthForm = ({
 )
 
 export default AuthForm;
+
